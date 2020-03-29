@@ -7,6 +7,10 @@ PATH=".:$PATH"
 DATE="`date -I -d '-10 days'`T00:00:00.000Z"
 ## Delete all entries before that date
 docker-compose exec -T mongo mongo kadira <<EOF
+db.getCollection('errorMetrics').remove({"_id.time": {"\$lte": new ISODate("$DATE")}})
+db.getCollection('errorTraces').remove({"startTime": {"\$lte": new ISODate("$DATE")}})
+db.getCollection('methodsMetrics').remove({"_id.time": {"\$lte": new ISODate("$DATE")}})
+db.getCollection('methodTraces').remove({"startTime": {"\$lte": new ISODate("$DATE")}})
 db.getCollection('prodStats').remove({"time": {"\$lte": new ISODate("$DATE")}})
 db.getCollection('pubMetrics').remove({"_id.time": {"\$lte": new ISODate("$DATE")}})
 db.getCollection('pubTraces').remove({"startTime": {"\$lte": new ISODate("$DATE")}})
